@@ -26,3 +26,7 @@ npm run preview
 - **Mobile:** use the on-screen directional pad
 
 The city is procedurally generated. This is an initial playable prototype; it does not yet contain real building interiors, multiplayer, or advanced collision detection.
+
+## Deployment
+
+Connected to Cloudflare Pages project `cyber-city-3d`.
