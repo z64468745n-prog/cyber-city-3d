@@ -47,7 +47,7 @@ function Player({mode,keys,active}:{mode:Mode,keys:React.MutableRefObject<Keys>,
  return <group ref={group} position={[0,0,0]}>{mode==='THIRD PERSON'&&<group position={[0,0,0]}><mesh position={[0,1.1,0]} castShadow><capsuleGeometry args={[.38,.9,4,8]}/><meshStandardMaterial color="#111827" metalness={.65} roughness={.3}/></mesh><mesh position={[0,1.95,0]} castShadow><sphereGeometry args={[.27,16,16]}/><meshStandardMaterial color="#9deaff" emissive="#00bde8" emissiveIntensity={.35}/></mesh><mesh position={[0,1.2,-.42]}><boxGeometry args={[.55,.7,.08]}/><meshBasicMaterial color="#00eaff"/></mesh></group>}</group>;
 }
 
-function City({mode,keys,rain,active,onInfo}:{mode:Mode,keys:React.MutableRefObject<Keys>,rain:boolean,active:boolean,onInfo:(s:string)=>void,onRunOpen:()=>void}) {
+function City({mode,keys,rain,active,onInfo,onRunOpen}:{mode:Mode,keys:React.MutableRefObject<Keys>,rain:boolean,active:boolean,onInfo:(s:string)=>void,onRunOpen:()=>void}) {
  const roadMat=<meshStandardMaterial color="#080b13" roughness={.32} metalness={.7}/>;
  return <>
   <color attach="background" args={['#050711']}/><fog attach="fog" args={['#080b18',22,115]}/>
