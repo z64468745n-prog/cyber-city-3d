@@ -1,29 +1,147 @@
 import { useEffect, useState } from 'react';
 import './City10K.css';
 
-const faqs = [
- ['Who can take part?','The event information and eligibility requirements will be published by the organisers.'],
- ['How do I register?','Complete the registration form below. This preview confirms your details on screen; online submission will be connected when the organiser registration service is configured.'],
- ['Where is the route?','The official route map will be published here once confirmed by the organisers.'],
- ['When will race-day timings be announced?','The official schedule will be added as soon as it is confirmed.']
+const raceDate = new Date('2027-03-14T09:00:00');
+const faqItems = [
+  ['Can beginners take part?', 'Yes. The course is flat and there is a 90-minute time limit, so walking is welcome.'],
+  ['How much does registration cost?', 'Entry is 35 EUR before 1 February and 45 EUR after. Students pay 25 EUR.'],
+  ['Can I transfer my bib to someone else?', 'Transfers are allowed up to 14 days before the race by emailing the organisers.'],
+  ['Is there a refund policy?', 'Refunds are available until 1 month before the event, minus a 5 EUR processing fee.']
 ];
+const stats = [{ value: 10, label: 'Kilometres' }, { value: 2500, label: 'Expected Runners' }, { value: 6, label: 'Water Stations' }, { value: 1200, label: 'Charity Funds (EUR)' }];
 
 export default function City10K({ onBack }: { onBack: () => void }) {
- const [open,setOpen]=useState<number|null>(0);
- const [sent,setSent]=useState(false);
- const [form,setForm]=useState({name:'',email:'',phone:'',category:'10K'});
- const [seconds,setSeconds]=useState(0);
- useEffect(()=>{const id=window.setInterval(()=>setSeconds(s=>s+1),1000);return()=>window.clearInterval(id)},[]);
- const submit=(e:React.FormEvent)=>{e.preventDefault();setSent(true)};
- return <main className="run-site">
-  <header className="run-nav"><a className="run-logo" href="#run-home">CITY<span>10K</span><small> / RUN 2027</small></a><nav><a href="#run-about">THE EVENT</a><a href="#run-route">THE ROUTE</a><a href="#run-info">INFO</a><a href="#run-register" className="run-nav-cta">REGISTER ↗</a></nav><button className="run-back" onClick={onBack}>← CYBER CITY</button></header>
-  <section className="run-hero" id="run-home"><div className="run-grid"/><div className="run-hero-copy"><div className="run-kicker"><i/> ANTIGUA & BARBUDA · 2027</div><h1>RUN THE<br/><em>STREETS.</em></h1><p>A city-wide challenge. One course. Your pace. Join the City 10K Run 2027.</p><a className="run-button" href="#run-register">SECURE YOUR PLACE <b>↗</b></a><div className="run-hero-meta"><span>01 / COMMUNITY</span><span>02 / ENDURANCE</span><span>03 / FINISH STRONG</span></div></div><div className="run-visual"><div className="run-sun"/><div className="run-track"><span>10</span><small>KM</small></div><div className="run-runner">10<span>K</span></div><div className="run-visual-caption">CITY 10K <b>2027</b></div></div><div className="run-side-note">NO SHORTCUTS · JUST FORWARD</div></section>
-  <section className="run-strip"><div><b>10K</b><span>THE CHALLENGE</span></div><div><b>2027</b><span>RACE YEAR</span></div><div><b>1 CITY</b><span>ONE COMMUNITY</span></div><div><b>YOUR PACE</b><span>YOUR FINISH</span></div></section>
-  <section className="run-about" id="run-about"><div className="run-section-tag">01 / THE EVENT</div><div><h2>MORE THAN<br/><em>A FINISH LINE.</em></h2><p>City 10K Run 2027 brings runners and supporters together for a shared city experience. Whether you are chasing a personal best or taking on your first 10K, this is your chance to be part of the movement.</p><p className="run-muted">Official event date, venue and registration details will be published by the organisers.</p></div></section>
-  <section className="run-route" id="run-route"><div className="run-section-tag">02 / THE ROUTE</div><div className="run-route-head"><h2>THE CITY<br/><em>IS YOUR TRACK.</em></h2><p>10 kilometres. One unforgettable run.<br/>Official route details coming soon.</p></div><div className="run-map"><div className="run-map-label start">START / FINISH<br/><b>LOCATION TBA</b></div><svg viewBox="0 0 900 300" role="img" aria-label="Illustrative route graphic; official route to be announced"><path className="map-street" d="M0 60H900M0 145H900M0 230H900M100 0V300M260 0V300M430 0V300M610 0V300M790 0V300"/><path className="map-route-shadow" d="M95 230 C130 190 140 75 270 75 S390 245 500 210 S610 70 720 105 S780 220 835 60"/><path className="map-route" d="M95 230 C130 190 140 75 270 75 S390 245 500 210 S610 70 720 105 S780 220 835 60"/><circle cx="95" cy="230" r="9" className="map-point"/><circle cx="835" cy="60" r="9" className="map-point finish"/></svg><div className="run-map-label finish">COURSE<br/><b>10.0 KM</b></div><div className="run-map-watermark">ROUTE PREVIEW · NOT TO SCALE</div></div></section>
-  <section className="run-info" id="run-info"><div className="run-section-tag">03 / RACE INFORMATION</div><h2>GET READY.<br/><em>STAY READY.</em></h2><div className="run-info-grid"><article><span>01</span><h3>RACE DAY</h3><p>Event date and start time to be announced.</p></article><article><span>02</span><h3>RACE PACK</h3><p>Collection instructions and participant pack details to be announced.</p></article><article><span>03</span><h3>ON THE DAY</h3><p>Venue, facilities and road information will be published here.</p></article></div></section>
-  <section className="run-faq"><div className="run-section-tag">04 / FAQ</div><h2>GOOD TO<br/><em>KNOW.</em></h2><div className="run-faq-list">{faqs.map(([q,a],i)=><article key={q} className={open===i?'active':''}><button onClick={()=>setOpen(open===i?null:i)}><span>0{i+1} / {q}</span><b>{open===i?'−':'+'}</b></button>{open===i&&<p>{a}</p>}</article>)}</div></section>
-  <section className="run-register" id="run-register"><div className="run-section-tag">05 / REGISTRATION</div><div className="run-register-layout"><div><h2>YOUR<br/><em>10K STARTS HERE.</em></h2><p>Leave your details to begin your registration interest. The organiser's official registration and payment process will be connected before launch.</p><div className="run-register-stamp">CITY 10K<br/><b>2027</b></div></div><form onSubmit={submit}><label>FULL NAME<input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name"/></label><label>EMAIL ADDRESS<input required type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="you@example.com"/></label><label>PHONE NUMBER<input type="tel" value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="+1 (268)"/></label><label>RACE CATEGORY<select value={form.category} onChange={e=>setForm({...form,category:e.target.value})}><option>10K</option><option>Volunteer / Supporter</option></select></label><button className="run-button" type="submit">SUBMIT INTEREST <b>↗</b></button>{sent&&<p className="run-success" role="status">Thank you, {form.name}. Your details have been recorded in this page preview. Official submission is not active yet.</p>}</form></div></section>
-  <footer className="run-footer"><a className="run-logo" href="#run-home">CITY<span>10K</span><small> / RUN 2027</small></a><span>RUN TOGETHER. FINISH STRONG.</span><button onClick={onBack}>BACK TO CYBER CITY ↑</button></footer>
- </main>;
+  const [now, setNow] = useState(Date.now());
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [topVisible, setTopVisible] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [counts, setCounts] = useState([0, 0, 0, 0]);
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    const onScroll = () => { setScrolled(window.scrollY > 50); setTopVisible(window.scrollY > 500); };
+    window.addEventListener('scroll', onScroll);
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target.classList.contains('stats')) {
+          const start = performance.now();
+          const animate = (time: number) => {
+            const p = Math.min((time - start) / 1800, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            setCounts(stats.map(s => Math.floor(s.value * eased)));
+            if (p < 1) requestAnimationFrame(animate);
+          };
+          requestAnimationFrame(animate);
+        }
+        observer.unobserve(entry.target);
+      }
+    }), { threshold: 0.15 });
+    document.querySelectorAll('.run-reveal, .run-stats').forEach(el => observer.observe(el));
+    return () => { window.clearInterval(timer); window.removeEventListener('scroll', onScroll); observer.disconnect(); };
+  }, []);
+
+  const diff = Math.max(0, raceDate.getTime() - now);
+  const countdown = [
+    Math.floor(diff / 86400000),
+    Math.floor((diff % 86400000) / 3600000),
+    Math.floor((diff % 3600000) / 60000),
+    Math.floor((diff % 60000) / 1000)
+  ];
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const name = String(data.get('name') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const age = Number(data.get('age'));
+    const category = String(data.get('category') || '');
+    const next = {
+      name: name.split(/\s+/).length < 2,
+      email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+      age: !Number.isFinite(age) || age < 10 || age > 99,
+      category: !category
+    };
+    setErrors(next);
+    if (Object.values(next).some(Boolean)) {
+      const first = Object.keys(next).find(k => next[k as keyof typeof next]);
+      (document.getElementById(first!) as HTMLElement | null)?.focus();
+      return;
+    }
+    setSuccess(true);
+    const colours = ['#ff5a1f', '#ffb199', '#14181f', '#ffffff', '#22c55e'];
+    for (let i = 0; i < 80; i++) {
+      const piece = document.createElement('div');
+      const size = 6 + Math.random() * 8;
+      Object.assign(piece.style, { position: 'fixed', left: Math.random() * 100 + 'vw', top: '-20px', width: size + 'px', height: size * .5 + 'px', background: colours[Math.floor(Math.random() * colours.length)], zIndex: '999', pointerEvents: 'none', borderRadius: '2px' });
+      document.body.appendChild(piece);
+      const animation = piece.animate([{ transform: 'translate(0,0) rotate(0deg)', opacity: 1 }, { transform: `translate(${(Math.random() - .5) * 200}px, 105vh) rotate(${Math.random() * 720}deg)`, opacity: .8 }], { duration: 2500 + Math.random() * 1500, easing: 'cubic-bezier(.25,.6,.4,1)' });
+      animation.onfinish = () => piece.remove();
+    }
+  };
+
+  return <main className="run-site">
+    <nav className={scrolled ? 'run-navbar scrolled' : 'run-navbar'} id="run-top">
+      <a href="#run-home" className="run-logo">City<span>10K</span></a>
+      <button className="run-menu-toggle" onClick={() => setMenuOpen(v => !v)} aria-label="Toggle menu">☰</button>
+      <ul className={menuOpen ? 'run-nav-links open' : 'run-nav-links'}>
+        {['about', 'route', 'schedule', 'faq', 'register'].map(id => <li key={id}><a href={'#run-' + id} onClick={() => setMenuOpen(false)}>{id[0].toUpperCase() + id.slice(1)}</a></li>)}
+      </ul>
+      <button className="run-back" onClick={onBack}>← Cyber City</button>
+    </nav>
+
+    <header className="run-hero" id="run-home">
+      <div className="run-runner-emoji">🏃</div>
+      <span className="run-badge">Sunday, 14 March 2027 · City Park</span>
+      <h1>City <span>10K</span> Run</h1>
+      <p className="run-sub">Run for your health, your city, and your personal best.</p>
+      <div className="run-countdown">{countdown.map((n, i) => <div key={i}><strong>{String(n).padStart(2, '0')}</strong><small>{['Days', 'Hours', 'Minutes', 'Seconds'][i]}</small></div>)}</div>
+      <a href="#run-register" className="run-button">Register Now</a>
+    </header>
+
+    <section className="run-section" id="run-about">
+      <div className="run-section-title run-reveal"><h2>Why <span>Run With Us</span>?</h2><p>A fast, friendly course for first-timers and seasoned runners alike.</p></div>
+      <div className="run-stats">{stats.map((s, i) => <div className="run-stat run-reveal" key={s.label}><div className="run-stat-num">{counts[i].toLocaleString()}</div><div className="run-stat-label">{s.label}</div></div>)}</div>
+    </section>
+
+    <section className="run-section run-route-section" id="run-route">
+      <div className="run-section-title run-reveal"><h2>The <span>Route</span></h2><p>A flat, scenic loop through the park and along the riverside.</p></div>
+      <div className="run-route-wrap run-reveal">
+        <svg viewBox="0 0 800 400" aria-label="Route map">
+          <path className="run-route-path" d="M 80 320 C 150 80, 280 380, 380 170 S 600 60, 720 120 S 640 340, 520 300 S 300 360, 200 260 S 90 240, 80 320 Z"/>
+          <circle className="run-route-dot" cx="80" cy="320" r="10"/><text className="run-route-label" x="95" y="350">Start / Finish</text>
+          <circle className="run-route-dot" cx="380" cy="170" r="7"/><text className="run-route-label" x="395" y="160">Km 3 Water</text>
+          <circle className="run-route-dot" cx="720" cy="120" r="7"/><text className="run-route-label" x="600" y="100">Km 7 Water</text>
+        </svg>
+      </div>
+    </section>
+
+    <section className="run-section" id="run-schedule">
+      <div className="run-section-title run-reveal"><h2>Race <span>Day</span> Schedule</h2><p>Plan your morning, from bib pickup to the finish line.</p></div>
+      <div className="run-timeline">
+        {[['07:00', 'Bib Collection Opens', 'Main gate, City Park. Bring your confirmation email.'], ['08:30', 'Warm-Up Session', 'Led by certified coaches on the main lawn.'], ['09:00', '10K Race Start', 'Corral start. Chip timing at the start and finish.'], ['10:15', 'Awards Ceremony', 'Medals for finishers and age-group winners.']].map(([time, title, desc]) => <article className="run-event run-reveal" key={time}><time>{time}</time><h3>{title}</h3><p>{desc}</p></article>)}
+      </div>
+    </section>
+
+    <section className="run-section" id="run-faq">
+      <div className="run-section-title run-reveal"><h2>Frequently Asked <span>Questions</span></h2></div>
+      <div className="run-faq">{faqItems.map(([q, a], i) => <article className={'run-faq-item run-reveal ' + (openFaq === i ? 'open' : '')} key={q}><button className="run-faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>{q}<span>{openFaq === i ? '×' : '+'}</span></button><div className="run-faq-a" style={{ maxHeight: openFaq === i ? '180px' : '0' }}><p>{a}</p></div></article>)}</div>
+    </section>
+
+    <section className="run-section run-register-section" id="run-register">
+      <div className="run-section-title run-reveal"><h2>Secure Your <span>Spot</span></h2><p>Limited to 2,500 runners. Register today.</p></div>
+      <form className="run-reg-form" onSubmit={submit} noValidate>
+        <div className={'run-field ' + (errors.name ? 'invalid' : '')}><label htmlFor="run-name">Full name</label><input id="run-name" name="name" placeholder="Jane Doe" onChange={() => setErrors(v => ({ ...v, name: false }))}/><small>Please enter your full name.</small></div>
+        <div className={'run-field ' + (errors.email ? 'invalid' : '')}><label htmlFor="run-email">Email</label><input id="run-email" name="email" type="email" placeholder="jane@example.com" onChange={() => setErrors(v => ({ ...v, email: false }))}/><small>Please enter a valid email address.</small></div>
+        <div className={'run-field ' + (errors.age ? 'invalid' : '')}><label htmlFor="run-age">Age</label><input id="run-age" name="age" type="number" min="10" max="99" placeholder="30" onChange={() => setErrors(v => ({ ...v, age: false }))}/><small>Runners must be between 10 and 99.</small></div>
+        <div className={'run-field ' + (errors.category ? 'invalid' : '')}><label htmlFor="run-category">Category</label><select id="run-category" name="category" defaultValue="" onChange={() => setErrors(v => ({ ...v, category: false }))}><option value="">Choose a category</option><option>Individual</option><option>Student</option><option>Team (5+)</option><option>Wheelchair</option></select><small>Please choose a category.</small></div>
+        <button type="submit" className="run-button" disabled={success}>{success ? 'Registered' : 'Register'}</button>
+        {success && <div className="run-success" role="status">You're in! A confirmation email is on its way. See you at the start line.</div>}
+      </form>
+    </section>
+    <footer className="run-footer"><p><strong>City 10K Run</strong> · City Park, Sunday 14 March 2027</p><p>© {new Date().getFullYear()} City Running Club. All rights reserved.</p></footer>
+    <button className={'run-top-btn ' + (topVisible ? 'show' : '')} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top">↑</button>
+  </main>;
 }
