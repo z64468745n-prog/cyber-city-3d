@@ -67,7 +67,7 @@ export default function City10K({ onBack }: { onBack: () => void }) {
     setErrors(next);
     if (Object.values(next).some(Boolean)) {
       const first = Object.keys(next).find(k => next[k as keyof typeof next]);
-      (document.getElementById(first!) as HTMLElement | null)?.focus();
+      const focusIds: Record<string, string> = { name: 'run-name', email: 'run-email', age: 'run-age', category: 'run-category' };\n      (document.getElementById(focusIds[first!]) as HTMLElement | null)?.focus();
       return;
     }
     setSuccess(true);
