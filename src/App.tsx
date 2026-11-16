@@ -2,6 +2,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, Stars } from '@react-three/drei';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import City10K from './City10K';
 
 type Mode = 'FIRST PERSON' | 'THIRD PERSON';
 type Keys = Record<string, boolean>;
@@ -46,7 +47,7 @@ function Player({mode,keys,active}:{mode:Mode,keys:React.MutableRefObject<Keys>,
  return <group ref={group} position={[0,0,0]}>{mode==='THIRD PERSON'&&<group position={[0,0,0]}><mesh position={[0,1.1,0]} castShadow><capsuleGeometry args={[.38,.9,4,8]}/><meshStandardMaterial color="#111827" metalness={.65} roughness={.3}/></mesh><mesh position={[0,1.95,0]} castShadow><sphereGeometry args={[.27,16,16]}/><meshStandardMaterial color="#9deaff" emissive="#00bde8" emissiveIntensity={.35}/></mesh><mesh position={[0,1.2,-.42]}><boxGeometry args={[.55,.7,.08]}/><meshBasicMaterial color="#00eaff"/></mesh></group>}</group>;
 }
 
-function City({mode,keys,rain,active,onInfo}:{mode:Mode,keys:React.MutableRefObject<Keys>,rain:boolean,active:boolean,onInfo:(s:string)=>void}) {
+function City({mode,keys,rain,active,onInfo}:{mode:Mode,keys:React.MutableRefObject<Keys>,rain:boolean,active:boolean,onInfo:(s:string)=>void,onRunOpen:()=>void}) {
  const roadMat=<meshStandardMaterial color="#080b13" roughness={.32} metalness={.7}/>;
  return <>
   <color attach="background" args={['#050711']}/><fog attach="fog" args={['#080b18',22,115]}/>
@@ -58,6 +59,7 @@ function City({mode,keys,rain,active,onInfo}:{mode:Mode,keys:React.MutableRefObj
   {Array.from({length:25},(_,i)=><mesh key={'lane'+i} rotation={[-Math.PI/2,0,0]} position={[(i-12)*7.5,-.145,0]}><planeGeometry args={[.07,180]}/><meshBasicMaterial color="#193849"/></mesh>)}
   {cityBlocks.map((b,i)=><Building key={i} b={b}/>)}
   <group position={[0,0,0]}><mesh position={[0,.08,-11]}><boxGeometry args={[7,.16,.3]}/><meshBasicMaterial color="#ff238d"/></mesh><Html position={[0,5,-11]} center distanceFactor={13}><button className="world-label" onClick={()=>onInfo('NIGHT MARKET — Street food, underground fashion and local vendors.')}>NIGHT MARKET · OPEN</button></Html></group>
+  <group position={[-16,0,13]}><mesh position={[0,2.6,0]}><boxGeometry args={[7,5.2,1.1]}/><meshStandardMaterial color="#17120f" emissive="#4b1607" emissiveIntensity={.65}/></mesh><mesh position={[0,2.6,.58]}><planeGeometry args={[6.5,4.7]}/><meshBasicMaterial color="#ff642d"/></mesh><Html position={[0,6,0]} center distanceFactor={12}><button className="world-label run-world-portal" onClick={onRunOpen}>CITY 10K RUN 2027 · ENTER ↗</button></Html></group>
   <group position={[16,0,13]}><mesh position={[0,2.8,0]}><boxGeometry args={[6,5.6,6]}/><meshStandardMaterial color="#141a2d" emissive="#071c35"/></mesh><Html position={[0,6,0]} center distanceFactor={13}><button className="world-label" onClick={()=>onInfo('NEXUS TOWER — The city transit and communications hub.')}>NEXUS TOWER</button></Html></group>
   <Stars radius={100} depth={45} count={1000} factor={3} fade speed={.2}/>
   <Rain enabled={rain}/>
@@ -66,16 +68,17 @@ function City({mode,keys,rain,active,onInfo}:{mode:Mode,keys:React.MutableRefObj
 }
 
 export default function App(){
- const [started,setStarted]=useState(false);const [mode,setMode]=useState<Mode>('FIRST PERSON');const [rain,setRain]=useState(true);const [panel,setPanel]=useState('');const [paused,setPaused]=useState(false);const keys=useRef<Keys>({});
+ const [runOpen,setRunOpen]=useState(false);const [started,setStarted]=useState(false);const [mode,setMode]=useState<Mode>('FIRST PERSON');const [rain,setRain]=useState(true);const [panel,setPanel]=useState('');const [paused,setPaused]=useState(false);const keys=useRef<Keys>({});
  const enter=()=>{setStarted(true);setPaused(false);};
  const toggleMode=()=>setMode(m=>m==='FIRST PERSON'?'THIRD PERSON':'FIRST PERSON');
  useEffect(()=>{const key=(e:KeyboardEvent)=>{if(e.key.toLowerCase()==='v')toggleMode();if(e.key==='Escape')setPaused(true);};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[]);
  const hold=(key:string,on:boolean)=>{keys.current[key]=on;};
+ if(runOpen)return <City10K onBack={()=>setRunOpen(false)}/>;
  return <main className="app">
   <header className="topbar"><div className="brand"><span className="brand-mark">◈</span> CYBER<span>CITY</span><small> / 3D</small></div><div className="top-right"><span className="live-dot"/> CITY SYSTEM ONLINE <span className="top-sep">|</span> SECTOR 07</div></header>
   {!started?<section className="intro"><div className="intro-grid"/><div className="intro-copy"><div className="eyebrow"><i/> INTERACTIVE WORLD // 2089</div><h1>THE CITY<br/><em>NEVER</em> SLEEPS.</h1><p>Step into a neon-drenched future. Explore the streets, discover hidden districts, and move through a living city after dark.</p><button className="primary" onClick={enter}>ENTER THE CITY <span>↗</span></button><div className="intro-meta"><span>01 / FIRST-PERSON + THIRD-PERSON</span><span>WEBGL EXPERIENCE</span></div></div><div className="intro-art"><div className="sun"/><div className="tower t1"/><div className="tower t2"/><div className="tower t3"/><div className="tower t4"/><div className="art-caption">NIGHT DISTRICT <b>07</b></div></div><div className="scroll-note">SCROLL TO EXPLORE <span>↓</span></div></section>
   :<><div className="hud"><div className="hud-left"><div className="hud-tag">DISTRICT 07 <b>● LIVE</b></div><div className="hud-title">NEON QUARTER</div><div className="hud-sub">COORDINATES // 07.24.89</div></div><div className="hud-right"><button onClick={toggleMode}>{mode} <span>⇄</span></button><button onClick={()=>setRain(v=>!v)}>RAIN: {rain?'ON':'OFF'}</button><button onClick={()=>setPaused(v=>!v)}>{paused?'RESUME':'PAUSE'}Ⅱ</button></div></div>
-   <div className="scene-wrap" onClick={()=>{if(mode==='FIRST PERSON'&&!paused&&started)document.body.requestPointerLock?.();}}><Canvas shadows dpr={[1,1.5]} camera={{position:[0,1.7,0],fov:72}} gl={{antialias:true, powerPreference:'high-performance'}}><Suspense fallback={null}><City mode={mode} keys={keys} rain={rain} active={started&&!paused} onInfo={setPanel}/></Suspense></Canvas></div>
+   <div className="scene-wrap" onClick={()=>{if(mode==='FIRST PERSON'&&!paused&&started)document.body.requestPointerLock?.();}}><Canvas shadows dpr={[1,1.5]} camera={{position:[0,1.7,0],fov:72}} gl={{antialias:true, powerPreference:'high-performance'}}><Suspense fallback={null}><City mode={mode} keys={keys} rain={rain} active={started&&!paused} onInfo={setPanel} onRunOpen={()=>{document.exitPointerLock?.();setRunOpen(true);}}/></Suspense></Canvas></div>
    <div className="controls-hint">W A S D <span>MOVE</span> · MOUSE <span>LOOK</span> · SHIFT <span>SPRINT</span> · V <span>SWITCH VIEW</span></div>
    <div className="mobile-pad"><div className="dpad"><button onPointerDown={()=>hold('w',true)} onPointerUp={()=>hold('w',false)} onPointerLeave={()=>hold('w',false)}>▲</button><div><button onPointerDown={()=>hold('a',true)} onPointerUp={()=>hold('a',false)} onPointerLeave={()=>hold('a',false)}>◀</button><button onPointerDown={()=>hold('s',true)} onPointerUp={()=>hold('s',false)} onPointerLeave={()=>hold('s',false)}>▼</button><button onPointerDown={()=>hold('d',true)} onPointerUp={()=>hold('d',false)} onPointerLeave={()=>hold('d',false)}>▶</button></div></div><div className="mobile-tip">Use the arrows to walk<br/>Tap SWITCH VIEW to follow your character</div></div>
    {paused&&<div className="overlay"><div className="modal"><div className="eyebrow">SYSTEM PAUSED</div><h2>TAKE A BREATHER.</h2><button className="primary" onClick={()=>setPaused(false)}>RESUME EXPLORING ↗</button><button className="text-btn" onClick={()=>{setStarted(false);setPaused(false);}}>RETURN TO MAIN MENU</button></div></div>}
